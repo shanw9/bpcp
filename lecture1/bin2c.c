@@ -28,7 +28,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define USE_LIBZ
 
 #ifdef USE_LIBZ
 #include <zlib.h>
@@ -61,8 +60,7 @@ static const char *program_name = "";
  * Print error message and free allocated resources
  *
  */
-static int
-error(char *msg1, char *msg2, char *msg3)
+static int error(char *msg1, char *msg2, char *msg3)
 {
 	fprintf(stderr, "%s: %s%s%s\n", program_name, msg1, msg2, msg3);
 
@@ -85,8 +83,7 @@ error(char *msg1, char *msg2, char *msg3)
  * Replacement for strrchr in case it isn't present in libc
  *
  */
-static char *
-my_strrchr(char *s, int c)
+static char *my_strrchr(char *s, int c)
 {
 	char *ptr = NULL;
 
@@ -120,8 +117,7 @@ my_strrchr(char *s, int c)
  * memory, Z_BUF_ERROR if there was not enough room in the output buffer,
  * Z_STREAM_ERROR if the level parameter is invalid.
  */
-int
-my_compress2(Bytef *dest, uLongf *dest_len, 
+int my_compress2(Bytef *dest, uLongf *dest_len, 
 	const Bytef *source, uLong src_len, 
 	int level)
 {
@@ -163,7 +159,7 @@ my_compress2(Bytef *dest, uLongf *dest_len,
 }
 #endif
 
-const char *usage =
+static const char *usage =
 "\nUsage: ./bin2c -o <output-file> file1 [file2 [file3 [...]]]\n\n"
 "    Example: ./bin2c -o data.c a.bmp b.jpg c.png\n\n";
 
@@ -171,15 +167,14 @@ static char *outputfile;
 static char **filelist;
 static int  file_list;
 
-typedef struct _export_list{
+typedef struct _export_list {
 	char 	  	    *export_data;
 	struct _export_list *next;
 }export_list_t;
 
 static export_list_t *exports_head = NULL;
 
-static const char *
-add_export(const char *filename)
+static const char *add_export(const char *filename)
 {
 	int idx = 0;
 	int i;
@@ -228,8 +223,7 @@ add_export(const char *filename)
 	return strname;
 }
 
-static void
-print_exports(FILE *f)
+static void print_exports(FILE *f)
 {
 	export_list_t *els = exports_head;
 	while (els) {
@@ -238,8 +232,7 @@ print_exports(FILE *f)
 	}
 }
 
-static int
-parser_args(int argc, char *argv[])
+static int parser_args(int argc, char *argv[])
 {
 	int i;
 	int list_idx = 0;
@@ -272,8 +265,7 @@ parser_args(int argc, char *argv[])
 	return 1;
 }
 
-int
-main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 	int i;
 	char suffix[SUFFIX_LEN];
