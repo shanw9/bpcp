@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.12)
 
 PROJECT(uloop C)
 
@@ -31,7 +31,7 @@ IF(NOT LUAPATH)
 ENDIF()
 
 IF(BUILD_LUA)
-	ADD_LIBRARY(uloop_lua MODULE uloop.c)
+	ADD_LIBRARY(uloop_lua MODULE ../source/uloop/uloop.c)
 	SET_TARGET_PROPERTIES(uloop_lua PROPERTIES
 		OUTPUT_NAME uloop
 		PREFIX ""

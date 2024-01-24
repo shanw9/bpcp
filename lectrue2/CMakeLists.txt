@@ -11,6 +11,8 @@ IF(CMAKE_C_COMPILER_VERSION VERSION_GREATER 6)
 ENDIF()
 ADD_DEFINITIONS(-Os -std=gnu99 -g3 -Wmissing-declarations -Wno-unused-parameter)
 
+INCLUDE_DIRECTORIES(source/include)
+
 OPTION(BUILD_LUA "build Lua plugin" ON)
 OPTION(BUILD_EXAMPLES "build examples" ON)
 
@@ -21,7 +23,24 @@ IF(JSONC_FOUND)
   INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
 ENDIF()
 
-SET(SOURCES avl.c avl-cmp.c blob.c blobmsg.c uloop.c usock.c ustream.c ustream-fd.c vlist.c utils.c safe_list.c runqueue.c md5.c kvlist.c ulog.c base64.c udebug.c udebug-remote.c)
+SET(SOURCES source/uavl/avl.c 
+			source/uavl/avl-cmp.c 
+			source/ublob/blob.c 
+			source/ublob/blobmsg.c 
+			source/uloop/uloop.c 
+			source/usock/usock.c 
+			source/ustream/ustream.c 
+			source/ustream/ustream-fd.c
+			source/ulist/vlist.c 
+			source/uutils/utils.c 
+			source/ulist/safe_list.c
+			source/urunqueue/runqueue.c 
+			source/ucrypto/md5.c 
+			source/ulist/kvlist.c 
+			source/udebug/ulog.c 
+			source/ucrypto/base64.c 
+			source/udebug/udebug.c 
+			source/udebug/udebug-remote.c)
 
 ADD_LIBRARY(ubox SHARED ${SOURCES})
 ADD_LIBRARY(ubox-static STATIC ${SOURCES})
@@ -38,8 +57,8 @@ IF(NOT HAVE_GETTIME OR NOT HAVE_SHM)
 	ENDIF()
 ENDIF()
 
-FILE(GLOB headers *.h)
-LIST(FILTER headers EXCLUDE REGEX "-priv.h$" )
+FILE(GLOB headers source/include/*.h)
+# LIST(FILTER headers EXCLUDE REGEX "-priv.h$" )
 INSTALL(FILES ${headers}
 	DESTINATION include/libubox
 )
@@ -56,7 +75,7 @@ MACRO(ADD_UNIT_TEST_SAN name)
   TARGET_COMPILE_OPTIONS(${name}-san PRIVATE -g -fno-omit-frame-pointer -fsanitize=undefined,address,leak -fno-sanitize-recover=all)
   TARGET_LINK_OPTIONS(${name}-san PRIVATE -fsanitize=undefined,address,leak)
   TARGET_LINK_LIBRARIES(${name}-san ubox blobmsg_json json_script ${json})
-  TARGET_INCLUDE_DIRECTORIES(${name}-san PRIVATE ${PROJECT_SOURCE_DIR})
+  TARGET_INCLUDE_DIRECTORIES(${name}-san PRIVATE ${PROJECT_SOURCE_DIR}/source/include)
 ENDMACRO(ADD_UNIT_TEST_SAN)
 
 IF(UNIT_TESTING)
@@ -66,10 +85,10 @@ ENDIF()
 
 find_library(json NAMES json-c)
 IF(EXISTS ${json})
-	ADD_LIBRARY(blobmsg_json SHARED blobmsg_json.c)
+	ADD_LIBRARY(blobmsg_json SHARED source/ublob/blobmsg_json.c)
 	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
 
-	ADD_LIBRARY(blobmsg_json-static STATIC blobmsg_json.c)
+	ADD_LIBRARY(blobmsg_json-static STATIC source/ublob/blobmsg_json.c)
 	SET_TARGET_PROPERTIES(blobmsg_json-static
 			      PROPERTIES OUTPUT_NAME blobmsg_json)
 
@@ -77,10 +96,10 @@ IF(EXISTS ${json})
 		ADD_UNIT_TEST_SAN(jshn)
 	ENDIF(UNIT_TESTING)
 
-	ADD_EXECUTABLE(jshn jshn.c)
+	ADD_EXECUTABLE(jshn source/ujson/jshn.c)
 	TARGET_LINK_LIBRARIES(jshn blobmsg_json ${json})
 
-	ADD_LIBRARY(json_script SHARED json_script.c)
+	ADD_LIBRARY(json_script SHARED source/ujson/json_script.c)
 	TARGET_LINK_LIBRARIES(json_script ubox)
 
 	INSTALL(TARGETS blobmsg_json blobmsg_json-static jshn json_script
