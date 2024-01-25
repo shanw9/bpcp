@@ -22,9 +22,9 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#include "list.h"
-#include "uloop.h"
-#include "avl.h"
+#include "ubox-list.h"
+#include "ubox-uloop.h"
+#include "ubox-avl.h"
 
 #define UDEBUG_SOCK_NAME	"/var/run/udebug.sock"
 

@@ -20,7 +20,7 @@
 #define __USTREAM_H
 
 #include <stdarg.h>
-#include "uloop.h"
+#include "ubox-uloop.h"
 
 struct ustream;
 struct ustream_buf;

@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
-#include "ustream.h"
+#include "ubox-ustream.h"
 
 static void ustream_fd_set_uloop(struct ustream *s, bool write)
 {

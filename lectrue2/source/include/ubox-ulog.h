@@ -21,7 +21,7 @@
 
 #include <syslog.h>
 
-#include "udebug.h"
+#include "ubox-udebug.h"
 
 enum {
 	ULOG_KMSG   = (1 << 0),

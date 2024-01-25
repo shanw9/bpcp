@@ -18,8 +18,8 @@
 #ifndef __LIBUBOX_KVLIST_H
 #define __LIBUBOX_KVLIST_H
 
-#include "avl-cmp.h"
-#include "avl.h"
+#include "ubox-avl-cmp.h"
+#include "ubox-avl.h"
 
 struct kvlist {
 	struct avl_tree avl;

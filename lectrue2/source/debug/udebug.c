@@ -26,8 +26,8 @@
 #include <errno.h>
 #include <poll.h>
 #include <time.h>
+#include "ubox-usock.h"
 #include "udebug-priv.h"
-#include "usock.h"
 
 #define ALIGN(i, sz)	(((i) + (sz) - 1) & ~((sz) - 1))
 

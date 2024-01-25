@@ -28,8 +28,8 @@
 #include <stdbool.h>
 #include <limits.h>
 
-#include "uloop.h"
-#include "utils.h"
+#include "ubox-uloop.h"
+#include "ubox-utils.h"
 
 #ifdef USE_KQUEUE
 #include <sys/event.h>

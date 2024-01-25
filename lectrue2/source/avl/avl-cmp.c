@@ -14,8 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 #include <string.h>
-#include "avl-cmp.h"
-#include "blob.h"
+#include "ubox-avl-cmp.h"
+#include "ubox-blob.h"
 
 static inline int _min(int v1, int v2)
 {

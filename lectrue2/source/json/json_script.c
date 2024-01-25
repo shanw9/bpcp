@@ -16,8 +16,8 @@
 #include <sys/stat.h>
 #include <regex.h>
 
-#include "avl-cmp.h"
-#include "json_script.h"
+#include "ubox-avl-cmp.h"
+#include "ubox-json_script.h"
 
 struct json_call {
 	struct json_script_ctx *ctx;

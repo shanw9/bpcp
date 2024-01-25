@@ -44,9 +44,9 @@
 #include <time.h>
 #include <string.h>
 
-#include "avl.h"
+#include "ubox-avl.h"
+#include "ubox-list.h"
 #include "private/assert.h"
-#include "list.h"
 
 /**
  * internal type save inline function to calculate the maximum of

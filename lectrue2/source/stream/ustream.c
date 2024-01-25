@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "ustream.h"
+#include "ubox-ustream.h"
 
 static void ustream_init_buf(struct ustream_buf *buf, int len)
 {

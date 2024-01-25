@@ -66,8 +66,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ubox-utils.h"
 #include "private/assert.h"
-#include "utils.h"
 
 static const char Base64[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

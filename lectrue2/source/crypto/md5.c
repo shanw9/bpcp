@@ -53,8 +53,8 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "utils.h"
-#include "md5.h"
+#include "ubox-utils.h"
+#include "ubox-md5.h"
 
 /*
  * The basic MD5 functions.

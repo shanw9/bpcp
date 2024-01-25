@@ -19,7 +19,7 @@
 struct json_object;
 
 #include <stdbool.h>
-#include "blobmsg.h"
+#include "ubox-blobmsg.h"
 
 bool blobmsg_add_object(struct blob_buf *b, struct json_object *obj);
 bool blobmsg_add_json_element(struct blob_buf *b, const char *name, struct json_object *obj);

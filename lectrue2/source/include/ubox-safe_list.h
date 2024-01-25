@@ -26,8 +26,8 @@
 #define __LIBUBOX_SAFE_LIST_H
 
 #include <stdbool.h>
-#include "list.h"
-#include "utils.h"
+#include "ubox-list.h"
+#include "ubox-utils.h"
 
 struct safe_list;
 struct safe_list_iterator;

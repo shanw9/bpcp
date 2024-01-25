@@ -2,9 +2,10 @@
 #include <stdlib.h>
 
 #include <json.h>
-#include "blobmsg.h"
-#include "blobmsg_json.h"
-#include "json_script.h"
+
+#include "ubox-blobmsg.h"
+#include "ubox-blobmsg_json.h"
+#include "ubox-json_script.h"
 
 struct json_script_ctx	jctx;
 struct blob_buf 	b_vars;

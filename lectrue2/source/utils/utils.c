@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "utils.h"
+#include "ubox-utils.h"
 
 #define foreach_arg(_arg, _addr, _len, _first_addr, _first_len) \
 	for (_addr = (_first_addr), _len = (_first_len); \

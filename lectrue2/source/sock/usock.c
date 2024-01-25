@@ -30,8 +30,8 @@
 #include <stdio.h>
 #include <poll.h>
 
-#include "usock.h"
-#include "utils.h"
+#include "ubox-usock.h"
+#include "ubox-utils.h"
 
 static void usock_set_flags(int sock, unsigned int type)
 {

@@ -18,11 +18,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "utils.h"
-#include "avl-cmp.h"
-#include "blob.h"
+#include "ubox-utils.h"
+#include "ubox-avl-cmp.h"
+#include "ubox-blob.h"
 
-#include "kvlist.h"
+#include "ubox-kvlist.h"
 
 int kvlist_strlen(struct kvlist *kv, const void *data)
 {

@@ -18,7 +18,7 @@
 #ifndef __UDEBUG_PROTO_H
 #define __UDEBUG_PROTO_H
 
-#include "udebug.h"
+#include "ubox-udebug.h"
 
 struct udebug_hdr {
 	uint32_t ring_size;

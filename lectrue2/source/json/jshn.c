@@ -28,11 +28,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <inttypes.h>
-#include "list.h"
 
-#include "avl.h"
-#include "blob.h"
-#include "blobmsg_json.h"
+#include "ubox-list.h"
+#include "ubox-avl.h"
+#include "ubox-blob.h"
+#include "ubox-blobmsg_json.h"
 
 #define MAX_VARLEN	256
 

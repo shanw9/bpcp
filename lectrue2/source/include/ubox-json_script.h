@@ -16,10 +16,10 @@
 #ifndef __JSON_SCRIPT_H
 #define __JSON_SCRIPT_H
 
-#include "avl.h"
-#include "blob.h"
-#include "blobmsg.h"
-#include "utils.h"
+#include "ubox-avl.h"
+#include "ubox-blob.h"
+#include "ubox-blobmsg.h"
+#include "ubox-utils.h"
 
 struct json_script_file;
 

@@ -18,9 +18,9 @@
 #ifndef __UDEBUG_UTIL_H
 #define __UDEBUG_UTIL_H
 
-#include "blobmsg.h"
-#include "udebug.h"
-#include "udebug-proto.h"
+#include "ubox-blobmsg.h"
+#include "ubox-udebug.h"
+#include "ubox-udebug-proto.h"
 
 #define UDEBUG_TIMEOUT	1000
 

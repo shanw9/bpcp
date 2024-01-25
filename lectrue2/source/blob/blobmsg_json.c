@@ -14,8 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 #include <inttypes.h>
-#include "blobmsg.h"
-#include "blobmsg_json.h"
+#include "ubox-blobmsg.h"
+#include "ubox-blobmsg_json.h"
 
 #ifdef JSONC
 	#include <json.h>
