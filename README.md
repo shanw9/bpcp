@@ -15,60 +15,60 @@
     重构后的文件架构如下所示
 
     source
-    ├── include                 # 外部头文件所在位置
-    │   ├── private                 # 全局内部头文件所在位置
-    │   │   └── assert.h
-    │   ├── avl-cmp.h
-    │   ├── avl.h
-    │   ├── blob.h
-    │   ├── blobmsg.h
-    │   ├── blobmsg_json.h
-    │   ├── json_script.h
-    │   ├── kvlist.h
-    │   ├── list.h
-    │   ├── md5.h
-    │   ├── runqueue.h
-    │   ├── safe_list.h
-    │   ├── udebug.h
-    │   ├── udebug-proto.h
-    │   ├── ulog.h
-    │   ├── uloop.h
-    │   ├── usock.h
-    │   ├── ustream.h
-    │   ├── utils.h
-    │   └── vlist.h
-    ├── uavl                    
+    ├── avl
     │   ├── avl.c
     │   └── avl-cmp.c
-    ├── ublob
+    ├── blob
     │   ├── blob.c
     │   ├── blobmsg.c
     │   └── blobmsg_json.c
-    ├── ucrypto
+    ├── crypto
     │   ├── base64.c
     │   └── md5.c
-    ├── udebug                  # 模块源文件及模块内部头文件所在位置
+    ├── debug                       # 模块源文件及模块内部头文件所在位置
     │   ├── udebug.c
     │   ├── udebug-priv.h
     │   ├── udebug-remote.c
     │   └── ulog.c
-    ├── ujson
+    ├── include                     # 外部头文件所在位置
+    │   ├── private                     # 全局内部头文件所在位置
+    │   │   └── assert.h
+    │   ├── ubox-avl-cmp.h
+    │   ├── ubox-avl.h
+    │   ├── ubox-blob.h
+    │   ├── ubox-blobmsg.h
+    │   ├── ubox-blobmsg_json.h
+    │   ├── ubox-json_script.h
+    │   ├── ubox-kvlist.h
+    │   ├── ubox-list.h
+    │   ├── ubox-md5.h
+    │   ├── ubox-runqueue.h
+    │   ├── ubox-safe_list.h
+    │   ├── ubox-udebug.h
+    │   ├── ubox-udebug-proto.h
+    │   ├── ubox-ulog.h
+    │   ├── ubox-uloop.h
+    │   ├── ubox-usock.h
+    │   ├── ubox-ustream.h
+    │   ├── ubox-utils.h
+    │   └── ubox-vlist.h
+    ├── json
     │   ├── jshn.c
     │   └── json_script.c
-    ├── ulist
+    ├── list
     │   ├── kvlist.c
     │   ├── safe_list.c
     │   └── vlist.c
-    ├── uloop
+    ├── loop
     │   ├── uloop.c
     │   ├── uloop-epoll.c
     │   └── uloop-kqueue.c
-    ├── urunqueue
+    ├── runqueue
     │   └── runqueue.c
-    ├── usock
+    ├── sock
     │   └── usock.c
-    ├── ustream
+    ├── stream
     │   ├── ustream.c
     │   └── ustream-fd.c
-    └── uutils
+    └── utils
         └── utils.c
