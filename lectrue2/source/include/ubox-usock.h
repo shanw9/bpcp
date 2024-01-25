@@ -30,6 +30,10 @@
 #define USOCK_IPV4ONLY		0x4000
 #define USOCK_UNIX		0x8000
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 const char *usock_port(int port);
 int usock(int type, const char *host, const char *service);
 int usock_inet_timeout(int type, const char *host, const char *service,
@@ -50,5 +54,9 @@ usock_inet(int type, const char *host, const char *service, void *addr)
  * @param msecs timeout in microseconds
  */
 int usock_wait_ready(int fd, int msecs);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif /* USOCK_H_ */

@@ -28,6 +28,10 @@
 
 #include "ubox-utils.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BLOB_COOKIE		0x01234567
 
 enum {
@@ -261,5 +265,9 @@ blob_put_u64(struct blob_buf *buf, int id, uint64_t val)
 	     rem >= sizeof(struct blob_attr) && rem < attr_len && (blob_pad_len(pos) <= rem) && \
 	     (blob_pad_len(pos) >= sizeof(struct blob_attr)); \
 	     rem -= blob_pad_len(pos), pos = blob_next(pos))
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

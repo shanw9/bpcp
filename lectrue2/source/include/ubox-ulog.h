@@ -23,6 +23,10 @@
 
 #include "ubox-udebug.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
 	ULOG_KMSG   = (1 << 0),
 	ULOG_SYSLOG = (1 << 1),
@@ -42,5 +46,9 @@ void ulog(int priority, const char *fmt, ...)
 #define ULOG_NOTE(fmt, ...) ulog(LOG_NOTICE, fmt, ## __VA_ARGS__)
 #define ULOG_WARN(fmt, ...) ulog(LOG_WARNING, fmt, ## __VA_ARGS__)
 #define ULOG_ERR(fmt, ...) ulog(LOG_ERR, fmt, ## __VA_ARGS__)
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

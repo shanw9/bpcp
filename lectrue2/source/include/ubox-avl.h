@@ -46,6 +46,10 @@
 
 #include "ubox-list.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Support for OLSR.org linker symbol export */
 #define EXPORT(sym) sym
 
@@ -549,6 +553,10 @@ __avl_find_element(const struct avl_tree *tree, const void *key, size_t offset, 
        (tree)->root = NULL; \
        (tree)->count > 0; \
        element = ptr, ptr = avl_next_element(ptr, node_member), (tree)->count--)
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif /* _AVL_H */
 

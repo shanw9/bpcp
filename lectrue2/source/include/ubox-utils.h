@@ -27,6 +27,9 @@
 #include <unistd.h>
 #include <time.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /*
  * calloc_a(size_t len, [void **addr, size_t len,...], NULL)
  *
@@ -266,5 +269,9 @@ static inline unsigned long cbuf_size(int order)
 void *cbuf_alloc(unsigned int order);
 void cbuf_free(void *ptr, unsigned int order);
 int mkdir_p(char *dir, mode_t mask);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

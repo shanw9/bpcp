@@ -20,6 +20,10 @@
 
 #include "ubox-udebug.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct udebug_hdr {
 	uint32_t ring_size;
 	uint32_t data_size;
@@ -68,5 +72,9 @@ static inline void *udebug_buf_ptr(struct udebug_buf *buf, uint32_t ofs)
 {
 	return buf->data + (ofs & (buf->data_size - 1));
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

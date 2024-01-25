@@ -29,6 +29,10 @@
 #include "ubox-list.h"
 #include "ubox-utils.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct safe_list;
 struct safe_list_iterator;
 
@@ -58,5 +62,9 @@ static inline bool safe_list_empty(struct safe_list *head)
 {
 	return list_empty(&head->list);
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

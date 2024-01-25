@@ -19,6 +19,10 @@
 #include <stdarg.h>
 #include "ubox-blob.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BLOBMSG_ALIGN	2
 #define BLOBMSG_PADDING(len) (((len) + (1 << BLOBMSG_ALIGN) - 1) & ~((1 << BLOBMSG_ALIGN) - 1))
 
@@ -373,5 +377,9 @@ int blobmsg_printf(struct blob_buf *buf, const char *name, const char *format, .
 	     rem >= sizeof(struct blob_attr) && (blob_pad_len(pos) <= rem) && \
 	     (blob_pad_len(pos) >= sizeof(struct blob_attr)); \
 	     rem -= blob_pad_len(pos), pos = blob_next(pos))
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

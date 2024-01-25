@@ -21,6 +21,10 @@
 #include "ubox-avl-cmp.h"
 #include "ubox-avl.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct kvlist {
 	struct avl_tree avl;
 
@@ -60,5 +64,9 @@ bool kvlist_delete(struct kvlist *kv, const char *name);
 
 int kvlist_strlen(struct kvlist *kv, const void *data);
 int kvlist_blob_len(struct kvlist *kv, const void *data);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

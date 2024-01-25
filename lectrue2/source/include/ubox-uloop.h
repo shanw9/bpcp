@@ -32,6 +32,10 @@
 
 #include "ubox-list.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct uloop_fd;
 struct uloop_timeout;
 struct uloop_process;
@@ -149,5 +153,9 @@ static inline int uloop_run(void)
 	return uloop_run_timeout(-1);
 }
 void uloop_done(void);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

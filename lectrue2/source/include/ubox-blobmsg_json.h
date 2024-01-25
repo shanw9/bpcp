@@ -21,6 +21,10 @@ struct json_object;
 #include <stdbool.h>
 #include "ubox-blobmsg.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 bool blobmsg_add_object(struct blob_buf *b, struct json_object *obj);
 bool blobmsg_add_json_element(struct blob_buf *b, const char *name, struct json_object *obj);
 bool blobmsg_add_json_from_string(struct blob_buf *b, const char *str);
@@ -55,5 +59,9 @@ static inline char *blobmsg_format_json_value_indent(struct blob_attr *attr, int
 {
 	return blobmsg_format_json_value_with_cb(attr, NULL, NULL, indent);
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

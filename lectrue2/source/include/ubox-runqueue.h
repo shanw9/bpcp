@@ -23,6 +23,10 @@
 #include "ubox-safe_list.h"
 #include "ubox-uloop.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct runqueue;
 struct runqueue_task;
 struct runqueue_task_type;
@@ -120,5 +124,9 @@ void runqueue_process_add(struct runqueue *q, struct runqueue_process *p, pid_t 
 /* to be used only from runqueue_process callbacks */
 void runqueue_process_cancel_cb(struct runqueue *q, struct runqueue_task *t, int type);
 void runqueue_process_kill_cb(struct runqueue *q, struct runqueue_task *t);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

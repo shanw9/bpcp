@@ -22,6 +22,10 @@
 #include <stdarg.h>
 #include "ubox-uloop.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct ustream;
 struct ustream_buf;
 
@@ -217,5 +221,9 @@ static inline bool ustream_poll(struct ustream *s)
 
 	return s->poll(s);
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

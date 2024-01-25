@@ -21,6 +21,10 @@
 #include "ubox-blobmsg.h"
 #include "ubox-utils.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct json_script_file;
 
 struct json_script_ctx {
@@ -132,5 +136,9 @@ json_script_file_from_blobmsg(const char *name, void *data, int len);
  */
 const char *json_script_find_var(struct json_script_ctx *ctx, struct blob_attr *vars,
 				 const char *name);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

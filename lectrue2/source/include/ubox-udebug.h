@@ -26,6 +26,10 @@
 #include "ubox-uloop.h"
 #include "ubox-avl.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define UDEBUG_SOCK_NAME	"/var/run/udebug.sock"
 
 enum udebug_format {
@@ -198,5 +202,9 @@ static inline bool udebug_is_connected(struct udebug *ctx)
 }
 
 int udebug_id_cmp(const void *k1, const void *k2, void *ptr);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

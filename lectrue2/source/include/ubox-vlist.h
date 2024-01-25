@@ -19,6 +19,10 @@
 
 #include "ubox-avl.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct vlist_tree;
 struct vlist_node;
 
@@ -89,5 +93,9 @@ void vlist_flush_all(struct vlist_tree *tree);
 
 #define vlist_for_element_to_last_reverse(tree, first, element, node_member) \
 	avl_for_element_range_reverse(first, avl_last_element(&(tree)->avl, element, node_member.avl), element, node_member.avl)
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

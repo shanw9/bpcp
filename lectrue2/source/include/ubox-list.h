@@ -32,6 +32,10 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define	prefetch(x)
 
 #ifndef container_of
@@ -224,5 +228,9 @@ list_splice_tail_init(struct list_head *list, struct list_head *head)
 	_list_splice(list, head->prev, head);
 	INIT_LIST_HEAD(list);
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif /* _LINUX_LIST_H_ */
