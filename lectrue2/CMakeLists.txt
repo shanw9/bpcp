@@ -23,24 +23,24 @@ IF(JSONC_FOUND)
   INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
 ENDIF()
 
-SET(SOURCES source/uavl/avl.c 
-			source/uavl/avl-cmp.c 
-			source/ublob/blob.c 
-			source/ublob/blobmsg.c 
-			source/uloop/uloop.c 
-			source/usock/usock.c 
-			source/ustream/ustream.c 
-			source/ustream/ustream-fd.c
-			source/ulist/vlist.c 
-			source/uutils/utils.c 
-			source/ulist/safe_list.c
-			source/urunqueue/runqueue.c 
-			source/ucrypto/md5.c 
-			source/ulist/kvlist.c 
-			source/udebug/ulog.c 
-			source/ucrypto/base64.c 
-			source/udebug/udebug.c 
-			source/udebug/udebug-remote.c)
+SET(SOURCES source/avl/avl.c 
+			source/avl/avl-cmp.c 
+			source/blob/blob.c 
+			source/blob/blobmsg.c 
+			source/loop/uloop.c 
+			source/sock/usock.c 
+			source/stream/ustream.c 
+			source/stream/ustream-fd.c
+			source/list/vlist.c 
+			source/utils/utils.c 
+			source/list/safe_list.c
+			source/runqueue/runqueue.c 
+			source/crypto/md5.c 
+			source/list/kvlist.c 
+			source/debug/ulog.c 
+			source/crypto/base64.c 
+			source/debug/udebug.c 
+			source/debug/udebug-remote.c)
 
 ADD_LIBRARY(ubox SHARED ${SOURCES})
 ADD_LIBRARY(ubox-static STATIC ${SOURCES})
@@ -85,10 +85,10 @@ ENDIF()
 
 find_library(json NAMES json-c)
 IF(EXISTS ${json})
-	ADD_LIBRARY(blobmsg_json SHARED source/ublob/blobmsg_json.c)
+	ADD_LIBRARY(blobmsg_json SHARED source/blob/blobmsg_json.c)
 	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
 
-	ADD_LIBRARY(blobmsg_json-static STATIC source/ublob/blobmsg_json.c)
+	ADD_LIBRARY(blobmsg_json-static STATIC source/blob/blobmsg_json.c)
 	SET_TARGET_PROPERTIES(blobmsg_json-static
 			      PROPERTIES OUTPUT_NAME blobmsg_json)
 
@@ -96,10 +96,10 @@ IF(EXISTS ${json})
 		ADD_UNIT_TEST_SAN(jshn)
 	ENDIF(UNIT_TESTING)
 
-	ADD_EXECUTABLE(jshn source/ujson/jshn.c)
+	ADD_EXECUTABLE(jshn source/json/jshn.c)
 	TARGET_LINK_LIBRARIES(jshn blobmsg_json ${json})
 
-	ADD_LIBRARY(json_script SHARED source/ujson/json_script.c)
+	ADD_LIBRARY(json_script SHARED source/json/json_script.c)
 	TARGET_LINK_LIBRARIES(json_script ubox)
 
 	INSTALL(TARGETS blobmsg_json blobmsg_json-static jshn json_script

@@ -31,7 +31,7 @@ IF(NOT LUAPATH)
 ENDIF()
 
 IF(BUILD_LUA)
-	ADD_LIBRARY(uloop_lua MODULE ../source/uloop/uloop.c)
+	ADD_LIBRARY(uloop_lua MODULE ../source/loop/uloop.c)
 	SET_TARGET_PROPERTIES(uloop_lua PROPERTIES
 		OUTPUT_NAME uloop
 		PREFIX ""
