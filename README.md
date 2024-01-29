@@ -72,3 +72,11 @@
     │   └── ustream-fd.c
     └── utils
         └── utils.c
+
+## 第三章：消除编译警告
+
+### 作业
+
+    使用 -Wall -Wextra 选项编译 bin2.c 和 libubox，并消除或者压制其中的警告
+
+    本章作业在文件夹 lecture1 及 lecture2 中完成
