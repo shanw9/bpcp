@@ -184,6 +184,8 @@ static int handle_case(struct json_call *call, struct blob_attr *expr)
 
 static int handle_return(struct json_call *call, struct blob_attr *expr)
 {
+	(void)call;
+	(void)expr;
 	return -2;
 }
 
@@ -663,12 +665,18 @@ static void
 __default_handle_error(struct json_script_ctx *ctx, const char *msg,
 		       struct blob_attr *context)
 {
+	(void)ctx;
+	(void)msg;
+	(void)context;
 }
 
 static const char *
 __default_handle_var(struct json_script_ctx *ctx, const char *name,
 		     struct blob_attr *vars)
 {
+	(void)ctx;
+	(void)name;
+	(void)vars;
 	return NULL;
 }
 
@@ -676,6 +684,9 @@ static int
 __default_handle_expr(struct json_script_ctx *ctx, const char *name,
 		      struct blob_attr *expr, struct blob_attr *vars)
 {
+	(void)name;
+	(void)expr;
+	(void)vars;
 	ctx->handle_error(ctx, "Unknown expression type", expr);
 	return -1;
 }
@@ -683,6 +694,8 @@ __default_handle_expr(struct json_script_ctx *ctx, const char *name,
 static struct json_script_file *
 __default_handle_file(struct json_script_ctx *ctx, const char *name)
 {
+	(void)ctx;
+	(void)name;
 	return NULL;
 }
 

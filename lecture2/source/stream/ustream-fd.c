@@ -83,6 +83,7 @@ static void ustream_fd_read_pending(struct ustream_fd *sf, bool *more)
 
 static int ustream_fd_write(struct ustream *s, const char *buf, int buflen, bool more)
 {
+	(void)more;
 	struct ustream_fd *sf = container_of(s, struct ustream_fd, stream);
 	ssize_t ret = 0, len;
 

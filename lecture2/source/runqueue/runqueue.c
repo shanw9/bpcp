@@ -81,6 +81,7 @@ static void runqueue_start_next(struct runqueue *q)
 
 static int __runqueue_cancel(void *ctx, struct safe_list *list)
 {
+	(void)ctx;
 	struct runqueue_task *t;
 
 	t = container_of(list, struct runqueue_task, list);
@@ -237,6 +238,7 @@ void runqueue_task_complete(struct runqueue_task *t)
 static void
 __runqueue_proc_cb(struct uloop_process *p, int ret)
 {
+	(void)ret;
 	struct runqueue_process *t = container_of(p, struct runqueue_process, proc);
 
 	runqueue_task_complete(&t->task);
@@ -244,6 +246,7 @@ __runqueue_proc_cb(struct uloop_process *p, int ret)
 
 void runqueue_process_cancel_cb(struct runqueue *q, struct runqueue_task *t, int type)
 {
+	(void)q;
 	struct runqueue_process *p = container_of(t, struct runqueue_process, task);
 
 	if (!type)
@@ -254,6 +257,7 @@ void runqueue_process_cancel_cb(struct runqueue *q, struct runqueue_task *t, int
 
 void runqueue_process_kill_cb(struct runqueue *q, struct runqueue_task *t)
 {
+	(void)q;
 	struct runqueue_process *p = container_of(t, struct runqueue_process, task);
 
 	uloop_process_delete(&p->proc);

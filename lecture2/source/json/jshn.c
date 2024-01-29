@@ -319,6 +319,7 @@ static int usage(const char *progname)
 
 static int avl_strcmp_var(const void *k1, const void *k2, void *ptr)
 {
+	(void)ptr;
 	const char *s1 = k1;
 	const char *s2 = k2;
 	char c1, c2;

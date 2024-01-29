@@ -14,6 +14,8 @@ struct blob_buf 	b_script;
 static void handle_command(struct json_script_ctx *ctx, const char *name,
 	struct blob_attr *data, struct blob_attr *vars)
 {
+	(void)ctx;
+	(void)vars;
 	struct blob_attr *cur;
 	size_t rem;
 
@@ -26,6 +28,7 @@ static void handle_command(struct json_script_ctx *ctx, const char *name,
 static struct json_script_file *
 handle_file(struct json_script_ctx *ctx, const char *filename)
 {
+	(void)ctx;
 	json_object *obj;
 
 	obj = json_object_from_file(filename);

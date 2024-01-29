@@ -53,6 +53,7 @@ static void __randname(char *template)
 
 int udebug_id_cmp(const void *k1, const void *k2, void *ptr)
 {
+	(void)ptr;
 	uint32_t id1 = (uint32_t)(uintptr_t)k1, id2 = (uint32_t)(uintptr_t)k2;
 	if (id1 < id2)
 		return -1;
@@ -813,6 +814,7 @@ udebug_send_and_wait(struct udebug *ctx, struct udebug_client_msg *msg, int *rfd
 
 static void udebug_fd_cb(struct uloop_fd *fd, unsigned int events)
 {
+	(void)events;
 	struct udebug *ctx = container_of(fd, struct udebug, fd);
 
 	if (fd->eof)

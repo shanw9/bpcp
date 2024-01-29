@@ -26,11 +26,13 @@
 
 int kvlist_strlen(struct kvlist *kv, const void *data)
 {
+	(void)kv;
 	return strlen(data) + 1;
 }
 
 int kvlist_blob_len(struct kvlist *kv, const void *data)
 {
+	(void)kv;
 	return blob_pad_len(data);
 }
 

@@ -107,6 +107,7 @@ static void ulog_kmsg(int priority, const char *fmt, va_list ap)
 __attribute__((format(printf, 2, 0)))
 static void ulog_stdio(int priority, const char *fmt, va_list ap)
 {
+	(void)priority;
 	FILE *out = stderr;
 
 	if (_ulog_ident)

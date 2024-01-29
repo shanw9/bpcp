@@ -24,6 +24,7 @@ struct client {
 
 static void client_read_cb(struct ustream *s, int bytes)
 {
+	(void)bytes;
 	struct client *cl = container_of(s, struct client, s.stream);
 	struct ustream_buf *buf = s->r.head;
 	char *newline, *str;
@@ -84,6 +85,8 @@ static void client_notify_state(struct ustream *s)
 
 static void server_cb(struct uloop_fd *fd, unsigned int events)
 {
+	(void)fd;
+	(void)events;
 	struct client *cl;
 	unsigned int sl = sizeof(struct sockaddr_in);
 	int sfd;

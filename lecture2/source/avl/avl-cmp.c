@@ -25,12 +25,14 @@ static inline int _min(int v1, int v2)
 int
 avl_strcmp(const void *k1, const void *k2, void *ptr)
 {
+	(void)ptr;
 	return strcmp(k1, k2);
 }
 
 int
 avl_blobcmp(const void *k1, const void *k2, void *ptr)
 {
+	(void)ptr;
 	int len = _min(blob_raw_len(k1), blob_raw_len(k2));
 
 	return memcmp(k1, k2, len);

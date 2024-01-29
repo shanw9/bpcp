@@ -94,6 +94,7 @@ static bool get_signo(uint64_t signums, int signo)
 
 static void signal_consume(struct uloop_fd *fd, unsigned int events)
 {
+	(void)events;
 	struct uloop_signal *usig, *usig_next;
 	uint64_t signums = 0;
 	uint8_t buf[32];
