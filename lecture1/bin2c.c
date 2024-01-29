@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 
 #ifdef USE_LIBZ
 #include <zlib.h>
@@ -37,8 +37,6 @@ typedef unsigned long uLongf;
 #endif
 
 #define BUF_SIZE 16384             /* Increase buffer size by this amount */
-
-#define SUFFIX_LEN 8
 
 static Bytef *source = NULL;       /* Buffer containing uncompressed data */
 static Bytef *dest = NULL;         /* Buffer containing compressed data */
@@ -77,24 +75,6 @@ static int error(char *msg1, char *msg2, char *msg3)
 	free(source);
 
 	return 1;
-}
-
-/*
- * Replacement for strrchr in case it isn't present in libc
- *
- */
-static char *my_strrchr(char *s, int c)
-{
-	char *ptr = NULL;
-
-	while (*s) {
-		if (*s == c) {
-			ptr = s;
-		}
-		s++;
-	}
-
-	return ptr;
 }
 
 #ifdef USE_LIBZ
@@ -165,7 +145,6 @@ static const char *usage =
 
 static char *outputfile;
 static char **filelist;
-static int  file_list;
 
 typedef struct _export_list {
 	char 	  	    *export_data;
@@ -187,7 +166,7 @@ static const char *add_export(const char *filename)
 	}
 	
 	ext = strrchr(begin, '.');
-	i = (ext ? (ext - begin) : strlen(begin)) + 10;
+	i = (ext ? (size_t)(ext - begin) : strlen(begin)) + 10;
 	//char *strname = (char *)malloc(i);
 	
 	strname[idx++] = '_';
@@ -238,7 +217,7 @@ static int parser_args(int argc, char *argv[])
 	int list_idx = 0;
 	if (argc < 4)
 	{
-		printf(usage);
+		printf("%s", usage);
 		return 0;
 	}
 	filelist = (char **)calloc(argc - 3, sizeof(char *));
@@ -252,9 +231,10 @@ static int parser_args(int argc, char *argv[])
 				break;
 			}
 			else if (argv[i][1] == 'h' || argv[i][1] == '?'){
-				printf(usage);
+				printf("%s", usage);
 				return 0;
 			}
+			break;
 		default:
 			filelist[list_idx++] = argv[i];
 			break;
@@ -268,13 +248,10 @@ static int parser_args(int argc, char *argv[])
 int main(int argc, char **argv)
 {
 	int i;
-	char suffix[SUFFIX_LEN];
 #ifdef USE_LIBZ
 	int result;
 #endif
 	unsigned j;
-	char *ptr;
-	int position;
 
 	program_name = argv[0];
 	if (!parser_args(argc, argv)) {
