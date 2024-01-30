@@ -80,3 +80,11 @@
     使用 -Wall -Wextra 选项编译 bin2.c 和 libubox，并消除或者压制其中的警告
 
     本章作业在文件夹 lecture1 及 lecture2 中完成
+
+## 第四章：常量的定义和使用
+
+### 作业
+
+    编写一个程序，使用 Glib 或 PurC 的原子字符串接口判断用户输入的单词是否为一个 C 语言关键词
+
+    使用 Glib 库，在 lecture4/ckw.c 中实现了此功能
