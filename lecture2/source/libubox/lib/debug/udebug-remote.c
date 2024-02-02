@@ -301,7 +301,7 @@ bool udebug_snapshot_get_entry(struct udebug_snapshot *s, struct udebug_iter *it
 		goto error;
 
 	it->s = s;
-	it->data = s->data + ptr->start;
+	it->data = (char *)s->data + ptr->start;
 	it->len = ptr->len;
 	it->timestamp = ptr->timestamp;
 	return true;

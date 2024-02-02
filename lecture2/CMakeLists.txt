@@ -1,117 +1,160 @@
-cmake_minimum_required(VERSION 3.13)
-INCLUDE(CheckLibraryExists)
-INCLUDE(CheckFunctionExists)
+# -----------------------------------------------------------------------------
+# Determine CMake version and build type.
+# -----------------------------------------------------------------------------
+#
+# NOTE: cmake_minimum_required() and project() *MUST* be the two first commands
+# used, see https://cmake.org/cmake/help/v3.3/command/project.html -- the
+# latter in particular handles loading a bunch of shared CMake definitions
+# and loading the cross-compilation settings from CMAKE_TOOLCHAIN_FILE.
+#
 
-PROJECT(ubox C)
+cmake_minimum_required(VERSION 3.15)
 
-ADD_DEFINITIONS(-Wall -Wextra -Werror)
+project(LibUbox C CXX)
 
-INCLUDE_DIRECTORIES(source/include)
+if (NOT CMAKE_BUILD_TYPE)
+    message(WARNING "No CMAKE_BUILD_TYPE value specified, defaulting to RelWithDebInfo.")
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build." FORCE)
+else ()
+    message(STATUS "The CMake build type is: ${CMAKE_BUILD_TYPE}")
+endif ()
 
-OPTION(BUILD_LUA "build Lua plugin" ON)
-OPTION(BUILD_EXAMPLES "build examples" ON)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/source/cmake")
 
-INCLUDE(FindPkgConfig)
-PKG_SEARCH_MODULE(JSONC json-c)
-IF(JSONC_FOUND)
-  ADD_DEFINITIONS(-DJSONC)
-  INCLUDE_DIRECTORIES(${JSONC_INCLUDE_DIRS})
-ENDIF()
-
-SET(SOURCES source/avl/avl.c 
-			source/avl/avl-cmp.c 
-			source/blob/blob.c 
-			source/blob/blobmsg.c 
-			source/loop/uloop.c 
-			source/sock/usock.c 
-			source/stream/ustream.c 
-			source/stream/ustream-fd.c
-			source/list/vlist.c 
-			source/utils/utils.c 
-			source/list/safe_list.c
-			source/runqueue/runqueue.c 
-			source/crypto/md5.c 
-			source/list/kvlist.c 
-			source/debug/ulog.c 
-			source/crypto/base64.c 
-			source/debug/udebug.c 
-			source/debug/udebug-remote.c)
-
-ADD_LIBRARY(ubox SHARED ${SOURCES})
-ADD_LIBRARY(ubox-static STATIC ${SOURCES})
-SET_TARGET_PROPERTIES(ubox-static PROPERTIES OUTPUT_NAME ubox)
-
-SET(LIBS)
-CHECK_FUNCTION_EXISTS(clock_gettime HAVE_GETTIME)
-CHECK_FUNCTION_EXISTS(shm_open HAVE_SHM)
-IF(NOT HAVE_GETTIME OR NOT HAVE_SHM)
-	CHECK_LIBRARY_EXISTS(rt clock_gettime "" NEED_GETTIME)
-	CHECK_LIBRARY_EXISTS(rt shm_open "" NEED_SHM)
-	IF(NEED_GETTIME OR NEED_SHM)
-		TARGET_LINK_LIBRARIES(ubox rt)
-	ENDIF()
-ENDIF()
-
-FILE(GLOB headers source/include/*.h)
-# LIST(FILTER headers EXCLUDE REGEX "-priv.h$" )
-INSTALL(FILES ${headers}
-	DESTINATION include/libubox
+# -----------------------------------------------------------------------------
+# Determine which port will be built
+# -----------------------------------------------------------------------------
+set(ALL_PORTS
+    Linux
+    Mac
+    Windows
+    AppleWin
 )
-INSTALL(TARGETS ubox ubox-static
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
-)
+set(PORT "NOPORT" CACHE STRING "choose which LibUbox port to build (one of ${ALL_PORTS})")
 
-ADD_SUBDIRECTORY(lua)
-ADD_SUBDIRECTORY(examples)
+list(FIND ALL_PORTS ${PORT} RET)
+if (${RET} EQUAL -1)
+    message(FATAL_ERROR "Please choose which LibUbox port to build (one of ${ALL_PORTS})")
+endif ()
 
-MACRO(ADD_UNIT_TEST_SAN name)
-  ADD_EXECUTABLE(${name}-san ${name}.c)
-  TARGET_COMPILE_OPTIONS(${name}-san PRIVATE -g -fno-omit-frame-pointer -fsanitize=undefined,address,leak -fno-sanitize-recover=all)
-  TARGET_LINK_OPTIONS(${name}-san PRIVATE -fsanitize=undefined,address,leak)
-  TARGET_LINK_LIBRARIES(${name}-san ubox blobmsg_json json_script ${json})
-  TARGET_INCLUDE_DIRECTORIES(${name}-san PRIVATE ${PROJECT_SOURCE_DIR}/source/include)
-ENDMACRO(ADD_UNIT_TEST_SAN)
+string(TOLOWER ${PORT} LIBUBOX_PORT_DIR)
 
-IF(UNIT_TESTING)
-  ENABLE_TESTING()
-  ADD_SUBDIRECTORY(tests)
-ENDIF()
+# -----------------------------------------------------------------------------
+# Determine the compiler
+# -----------------------------------------------------------------------------
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "AppleClang")
+    set(COMPILER_IS_CLANG ON)
+endif ()
 
-find_library(json NAMES json-c)
-IF(EXISTS ${json})
-	ADD_LIBRARY(blobmsg_json SHARED source/blob/blobmsg_json.c)
-	TARGET_LINK_LIBRARIES(blobmsg_json ubox ${json})
+if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    if (${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "7.3.0")
+        message(FATAL_ERROR "GCC 7.3 or newer is required to build LibUbox. Use a newer GCC version or Clang.")
+    endif ()
+endif ()
 
-	ADD_LIBRARY(blobmsg_json-static STATIC source/blob/blobmsg_json.c)
-	SET_TARGET_PROPERTIES(blobmsg_json-static
-			      PROPERTIES OUTPUT_NAME blobmsg_json)
+if (CMAKE_COMPILER_IS_GNUCXX OR COMPILER_IS_CLANG)
+    set(COMPILER_IS_GCC_OR_CLANG ON)
+endif ()
 
-	IF(UNIT_TESTING)
-		ADD_UNIT_TEST_SAN(jshn)
-	ENDIF(UNIT_TESTING)
+if (MSVC AND COMPILER_IS_CLANG)
+    set(COMPILER_IS_CLANG_CL ON)
+endif ()
 
-	ADD_EXECUTABLE(jshn source/json/jshn.c)
-	TARGET_LINK_LIBRARIES(jshn blobmsg_json ${json})
+# -----------------------------------------------------------------------------
+# Determine the target processor
+# -----------------------------------------------------------------------------
+# Use MSVC_CXX_ARCHITECTURE_ID instead of CMAKE_SYSTEM_PROCESSOR when defined,
+# since the later one just resolves to the host processor on Windows.
+if (MSVC_CXX_ARCHITECTURE_ID)
+    string(TOLOWER ${MSVC_CXX_ARCHITECTURE_ID} LOWERCASE_CMAKE_SYSTEM_PROCESSOR)
+else ()
+    string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} LOWERCASE_CMAKE_SYSTEM_PROCESSOR)
+endif ()
+if (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "(^aarch64|^arm64)")
+    set(WTF_CPU_ARM64 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^arm")
+    set(WTF_CPU_ARM 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^mips64")
+    set(WTF_CPU_MIPS64 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^mips")
+    set(WTF_CPU_MIPS 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "(x64|x86_64|amd64)")
+    # FORCE_32BIT is set in the build script when --32-bit is passed
+    # on a Linux/intel 64bit host. This allows us to produce 32bit
+    # binaries without setting the build up as a crosscompilation,
+    # which is the only way to modify CMAKE_SYSTEM_PROCESSOR.
+    if (FORCE_32BIT)
+        set(WTF_CPU_X86 1)
+    else ()
+        set(WTF_CPU_X86_64 1)
+    endif ()
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "(i[3-6]86|x86)")
+    set(WTF_CPU_X86 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "ppc")
+    set(WTF_CPU_PPC 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "ppc64")
+    set(WTF_CPU_PPC64 1)
+elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "ppc64le")
+    set(WTF_CPU_PPC64LE 1)
+else ()
+    set(WTF_CPU_UNKNOWN 1)
+endif ()
 
-	ADD_LIBRARY(json_script SHARED source/json/json_script.c)
-	TARGET_LINK_LIBRARIES(json_script ubox)
+# -----------------------------------------------------------------------------
+# Determine the operating system
+# -----------------------------------------------------------------------------
+if (UNIX)
+    if (APPLE)
+        set(WTF_OS_MAC_OS_X 1)
+    elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+        set(WTF_OS_LINUX 1)
+    else ()
+        set(WTF_OS_UNIX 1)
+    endif ()
+elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    set(WTF_OS_WINDOWS 1)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Fuchsia")
+    set(WTF_OS_FUCHSIA 1)
+else ()
+    message(FATAL_ERROR "Unknown OS '${CMAKE_SYSTEM_NAME}'")
+endif ()
 
-	INSTALL(TARGETS blobmsg_json blobmsg_json-static jshn json_script
-		ARCHIVE DESTINATION lib
-		LIBRARY DESTINATION lib
-		RUNTIME DESTINATION bin
-	)
+# -----------------------------------------------------------------------------
+# Default library types
+# -----------------------------------------------------------------------------
+# By default, only the highest-level libraries, LibUbox, is
+# shared, because properly building shared libraries that depend on each other
+# can be tricky. Override these in Options*.cmake for your port as needed.
+set(WTF_LIBRARY_TYPE STATIC)
+set(LibUbox_LIBRARY_TYPE SHARED)
 
-	FILE(GLOB scripts sh/*.sh)
-	INSTALL(FILES ${scripts}
-		DESTINATION share/libubox
-	)
+set(CMAKE_POSITION_INDEPENDENT_CODE True)
 
-ENDIF()
+# -----------------------------------------------------------------------------
+# Common configuration
+#------------------------------------------------------------------------------
+include(GlobalCommon)
 
-IF(ABIVERSION)
-	SET_TARGET_PROPERTIES(ubox PROPERTIES VERSION ${ABIVERSION})
-	SET_TARGET_PROPERTIES(json_script PROPERTIES VERSION ${ABIVERSION})
-	SET_TARGET_PROPERTIES(blobmsg_json PROPERTIES VERSION ${ABIVERSION})
-ENDIF()
+SET_PROJECT_VERSION(0 0 1)
+set(LIBUBOX_API_VERSION 0.0)
+
+add_subdirectory(source)
+
+# -----------------------------------------------------------------------------
+# Print the features list last, for maximum visibility.
+# -----------------------------------------------------------------------------
+PRINT_LIBUBOX_OPTIONS()
+
+# Packing stuff
+set(CPACK_PACKAGE_VENDOR "VincentWei")
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "LibUbox: a fake project for VincentWei's C language course.")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
+set(CPACK_SOURCE_GENERATOR "TGZ")
+set(CPACK_SOURCE_IGNORE_FILES
+      "/auto/;/cmake/;/.svn/;/.git/;/.bzr/;/CMakeFiles/;/_CPack_Packages/;CMakeCache.txt$;
+      ~$;.swp$;.cmake$;
+      ${CPACK_SOURCE_IGNORE_FILES}")
+
+#include(CPack)
+

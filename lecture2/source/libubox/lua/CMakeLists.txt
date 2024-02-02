@@ -9,7 +9,6 @@ IF(NOT LUA_CFLAGS)
 ENDIF()
 
 ADD_DEFINITIONS(-Os -Wall -Werror --std=gnu99 -g3 -I.. ${LUA_CFLAGS})
-LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 IF(APPLE)
 	SET(CMAKE_SHARED_MODULE_CREATE_C_FLAGS "${CMAKE_SHARED_MODULE_CREATE_C_FLAGS} -undefined dynamic_lookup")
@@ -31,7 +30,7 @@ IF(NOT LUAPATH)
 ENDIF()
 
 IF(BUILD_LUA)
-	ADD_LIBRARY(uloop_lua MODULE ../source/loop/uloop.c)
+	ADD_LIBRARY(uloop_lua MODULE ../lib/loop/uloop.c)
 	SET_TARGET_PROPERTIES(uloop_lua PROPERTIES
 		OUTPUT_NAME uloop
 		PREFIX ""

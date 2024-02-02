@@ -142,8 +142,8 @@ void *cbuf_alloc(unsigned int order)
 
 	if (mmap(ret, size, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
 		 fd, 0) != ret ||
-	    mmap(ret + size, size, PROT_READ | PROT_WRITE,
-		 MAP_FIXED | MAP_SHARED, fd, 0) != ret + size) {
+	    mmap((char *)ret + size, size, PROT_READ | PROT_WRITE,
+		 MAP_FIXED | MAP_SHARED, fd, 0) != (char *)ret + size) {
 		munmap(ret, size * 2);
 		ret = NULL;
 	}

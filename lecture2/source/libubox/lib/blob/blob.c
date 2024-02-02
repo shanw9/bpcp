@@ -26,7 +26,7 @@ blob_buffer_grow(struct blob_buf *buf, int minlen)
 	new = realloc(buf->buf, buf->buflen + delta);
 	if (new) {
 		buf->buf = new;
-		memset(buf->buf + buf->buflen, 0, delta);
+		memset((char *)(buf->buf) + buf->buflen, 0, delta);
 		buf->buflen += delta;
 	}
 	return !!new;

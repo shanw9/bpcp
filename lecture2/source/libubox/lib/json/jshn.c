@@ -88,7 +88,7 @@ static void add_json_string(const char *str)
 		if (len > 0)
 			fwrite(ptr, len, 1, stdout);
 		ptr = c + 1;
-		c = "'\\''";
+		c = (char *)"'\\''";
 		fwrite(c, strlen(c), 1, stdout);
 	}
 	len = strlen(ptr);
@@ -106,7 +106,7 @@ static void write_key_string(const char *key)
 
 static int add_json_element(const char *key, json_object *obj)
 {
-	char *type;
+	const char *type;
 
 	switch (json_object_get_type(obj)) {
 	case json_type_object:

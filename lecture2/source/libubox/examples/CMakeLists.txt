@@ -4,9 +4,6 @@ IF (BUILD_EXAMPLES)
     PROJECT(ubox-examples C)
     ADD_DEFINITIONS(-O1 -Wall -Werror --std=gnu99 -g3)
 
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
-    LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/..)
-
     FIND_LIBRARY(json NAMES json-c json)
 
     ADD_EXECUTABLE(ustream-example ustream-example.c)

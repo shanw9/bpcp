@@ -136,14 +136,14 @@ __udebug_buf_map(struct udebug_buf *buf, int fd)
 	if (ptr2 != ptr)
 		goto err_unmap;
 
-	ptr2 = mmap(ptr + buf->head_size + buf->data_size, buf->data_size,
+	ptr2 = mmap((char *)ptr + buf->head_size + buf->data_size, buf->data_size,
 		    PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED, fd,
 		    buf->head_size);
-	if (ptr2 != ptr + buf->head_size + buf->data_size)
+	if (ptr2 != (char *)ptr + buf->head_size + buf->data_size)
 		goto err_unmap;
 
 	buf->hdr = ptr;
-	buf->data = ptr + buf->head_size;
+	buf->data = (char *)ptr + buf->head_size;
 	return 0;
 
 err_unmap:
@@ -213,7 +213,7 @@ writev_retry(int fd, struct iovec *iov, int iov_len, int sock_fd)
 			if (!iov_len)
 				return len;
 		}
-		iov->iov_base += cur_len;
+		iov->iov_base = (void *)((char *)(iov->iov_base) + cur_len);
 		iov->iov_len -= cur_len;
 		msghdr.msg_iov = iov;
 		msghdr.msg_iovlen = iov_len;
@@ -279,7 +279,7 @@ recv_retry(int fd, struct iovec *iov, bool wait, int *recv_fd)
 
 		wait = true;
 		iov->iov_len -= bytes;
-		iov->iov_base += bytes;
+		iov->iov_base = (void *)((char *)(iov->iov_base) + bytes);
 		total += bytes;
 
 		if (iov->iov_len > 0) {

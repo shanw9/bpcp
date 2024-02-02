@@ -126,7 +126,7 @@ int clock_gettime(int type, struct timespec *tv);
  * a constant expression, most importantly without evaluating the argument.
  */
 #define __is_constant(x)						\
-	(sizeof(int) == sizeof(*(1 ? ((void*)((long)(x) * 0l)) : (int*)1)))
+	 __builtin_types_compatible_p(__typeof__((1 ? (void*) ((__INTPTR_TYPE__) ((x) * 0)) : (int*) 0)), int*)
 
 #define __eval_once(func, x)						\
 	({ __typeof__(x) __x = x; func(__x); })
